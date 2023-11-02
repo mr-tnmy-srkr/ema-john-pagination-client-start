@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { GrPrevious,GrNext } from 'react-icons/gr';
+import { FcNext,FcPrevious } from 'react-icons/fc';
 import {
   addToDb,
   deleteShoppingCart,
@@ -15,7 +16,7 @@ const Shop = () => {
   const [cart, setCart] = useState([]);
 
   // pagination starts =================================================================
-  const [currentPage,setCurrentPage] =useState(0)
+  const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const { count } = useLoaderData();
   // console.log(count); //76
@@ -35,23 +36,23 @@ console.log(pages); */
 
   const handleItemsPerPage = (e) => {
     // console.log(e.target.value);
-    const val = parseInt(e.target.value)
+    const val = parseInt(e.target.value);
     // console.log(val);
-    setItemsPerPage(val)
-    setCurrentPage(0)
+    setItemsPerPage(val);
+    setCurrentPage(0);
   };
 
-  const handlePrevPage = ()=>{
-    if(currentPage>0){
-      setCurrentPage(currentPage-1)
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
     }
-  }
-  const handleNextPage = ()=>{
-    if(currentPage<pages.length-1){
-      setCurrentPage(currentPage+1)
+  };
+  const handleNextPage = () => {
+    if (currentPage < pages.length - 1) {
+      setCurrentPage(currentPage + 1);
     }
-  }
-// console.log(currentPage);
+  };
+  // console.log(currentPage);
   /***
    * DONE 1 :get the total number of products
    * DONE 2: number of items per page dynamic
@@ -59,10 +60,10 @@ console.log(pages); */
    */
 
   useEffect(() => {
-    fetch("http://localhost:5000/products")
+    fetch(`http://localhost:5000/products?page=${currentPage}&&size=${itemsPerPage}`)
       .then((res) => res.json())
       .then((data) => setProducts(data));
-  }, []);
+  }, [currentPage,itemsPerPage]);
 
   useEffect(() => {
     const storedCart = getShoppingCart();
@@ -128,17 +129,21 @@ console.log(pages); */
         </Cart>
       </div>
       <div className="pagination">
-      <p>Current page : {currentPage}</p>
+        <p>Current page : {currentPage}</p>
 
-<button onClick={handlePrevPage}>Prev</button>
+        <button onClick={handlePrevPage}><FcPrevious></FcPrevious></button>
 
         {pages.map((page) => (
-          <button 
-           className={currentPage=== page && 'selected'}
-          onClick={()=>setCurrentPage(page)} key={page}>{page}</button>
+          <button
+            className={currentPage === page ? "selected":undefined}
+            onClick={() => setCurrentPage(page)}
+            key={page}
+          >
+            {page}
+          </button>
         ))}
 
-<button onClick={handleNextPage}>Next</button>
+        <button onClick={handleNextPage}><FcNext></FcNext></button>
 
         <select
           value={itemsPerPage}

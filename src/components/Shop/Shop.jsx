@@ -7,14 +7,44 @@ import {
 import Cart from "../Cart/Cart";
 import Product from "../Product/Product";
 import "./Shop.css";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
 
+  // pagination starts =================================================================
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const { count } = useLoaderData();
+  // console.log(count); //76
+  // const itemsPerPage = 10;
+  const numberOfPages = Math.ceil(count / itemsPerPage); //8
+
+  /* const pages = []
+for(let i=0; i<numberOfPages;i++){
+  pages.push(i)
+}
+console.log(pages); */
+
+  // or short cut
+
+  const pages = [...Array(numberOfPages).keys()]; //[0, 1, 2, 3, 4, 5, 6, 7]
+  // console.log(pages);
+
+  const handleItemsPerPage = (e) => {
+    // console.log(e.target.value);
+    const val = parseInt(e.target.value)
+    // console.log(val);
+    setItemsPerPage(val)
+  };
+// console.log(itemsPerPage);
+  /***
+   * DONE 1 :get the total number of products
+   * TODO 2: number of items per page dynamic
+   */
+
   useEffect(() => {
-    fetch("http://localhost:8000/products")
+    fetch("http://localhost:5000/products")
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
@@ -81,6 +111,23 @@ const Shop = () => {
             <button className="btn-proceed">Review Order</button>
           </Link>
         </Cart>
+      </div>
+      <div className="pagination">
+        {pages.map((page) => (
+          <button key={page}>{page}</button>
+        ))}
+        <select
+          value={itemsPerPage}
+          onChange={handleItemsPerPage}
+          name=""
+          id=""
+          className="select-btn"
+        >
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
       </div>
     </div>
   );

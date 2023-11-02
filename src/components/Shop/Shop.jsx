@@ -13,12 +13,13 @@ import { Link, useLoaderData } from "react-router-dom";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
-
+  const [cart,  setCart] = useState([]);
+// const cart = useLoaderData()
   // pagination starts =================================================================
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const { count } = useLoaderData();
+  const [count,setCount] = useState(0)
+  // const { count } = useLoaderData();
   // console.log(count); //76
   // const itemsPerPage = 10;
   const numberOfPages = Math.ceil(count / itemsPerPage); //8
@@ -59,13 +60,19 @@ console.log(pages); */
    * TODo 3: get the current page
    */
 
+useEffect(()=>{
+  fetch('http://localhost:5000/productsCount')
+  .then(response => response.json())
+  .then(data=>setCount(data.count))
+},[])
+
   useEffect(() => {
     fetch(`http://localhost:5000/products?page=${currentPage}&&size=${itemsPerPage}`)
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, [currentPage,itemsPerPage]);
 
-  useEffect(() => {
+/*   useEffect(() => {
     const storedCart = getShoppingCart();
     const savedCart = [];
     // step 1: get id of the addedProduct
@@ -83,7 +90,7 @@ console.log(pages); */
     }
     // step 5: set the cart
     setCart(savedCart);
-  }, [products]);
+  }, [products]); */
 
   const handleAddToCart = (product) => {
     // cart.push(product); '

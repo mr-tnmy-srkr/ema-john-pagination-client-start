@@ -7,13 +7,16 @@ const cartProductsLoader = async () => {
   // console.log(storedCart);
   console.log(storedCartIds);
 
-  const loadedProducts = await fetch("http://localhost:5000/productByIds", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(storedCartIds),
-  });
+  const loadedProducts = await fetch(
+    "https://ema-john-pagination-server-starter.vercel.app/productByIds",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(storedCartIds),
+    }
+  );
   const products = await loadedProducts.json();
 
   const savedCart = [];

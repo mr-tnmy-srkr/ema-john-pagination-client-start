@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { GrPrevious,GrNext } from 'react-icons/gr';
-import { FcNext,FcPrevious } from 'react-icons/fc';
+import { FcNext, FcPrevious } from "react-icons/fc";
 import {
   addToDb,
   deleteShoppingCart,
@@ -13,12 +13,12 @@ import { Link, useLoaderData } from "react-router-dom";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
-  const [cart,  setCart] = useState([]);
-// const cart = useLoaderData()
+  const [cart, setCart] = useState([]);
+  // const cart = useLoaderData()
   // pagination starts =================================================================
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [count,setCount] = useState(0)
+  const [count, setCount] = useState(0);
   // const { count } = useLoaderData();
   // console.log(count); //76
   // const itemsPerPage = 10;
@@ -60,19 +60,21 @@ console.log(pages); */
    * TODo 3: get the current page
    */
 
-useEffect(()=>{
-  fetch('http://localhost:5000/productsCount')
-  .then(response => response.json())
-  .then(data=>setCount(data.count))
-},[])
+  useEffect(() => {
+    fetch("https://ema-john-pagination-server-starter.vercel.app/productsCount")
+      .then((response) => response.json())
+      .then((data) => setCount(data.count));
+  }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/products?page=${currentPage}&&size=${itemsPerPage}`)
+    fetch(
+      `https://ema-john-pagination-server-starter.vercel.app/products?page=${currentPage}&&size=${itemsPerPage}`
+    )
       .then((res) => res.json())
       .then((data) => setProducts(data));
-  }, [currentPage,itemsPerPage]);
+  }, [currentPage, itemsPerPage]);
 
-/*   useEffect(() => {
+  /*   useEffect(() => {
     const storedCart = getShoppingCart();
     const savedCart = [];
     // step 1: get id of the addedProduct
@@ -138,11 +140,13 @@ useEffect(()=>{
       <div className="pagination">
         <p>Current page : {currentPage}</p>
 
-        <button onClick={handlePrevPage}><FcPrevious></FcPrevious></button>
+        <button onClick={handlePrevPage}>
+          <FcPrevious></FcPrevious>
+        </button>
 
         {pages.map((page) => (
           <button
-            className={currentPage === page ? "selected":undefined}
+            className={currentPage === page ? "selected" : undefined}
             onClick={() => setCurrentPage(page)}
             key={page}
           >
@@ -150,7 +154,9 @@ useEffect(()=>{
           </button>
         ))}
 
-        <button onClick={handleNextPage}><FcNext></FcNext></button>
+        <button onClick={handleNextPage}>
+          <FcNext></FcNext>
+        </button>
 
         <select
           value={itemsPerPage}
